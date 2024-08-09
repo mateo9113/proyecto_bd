@@ -1,3 +1,4 @@
+import { hash } from "bcrypt";
 import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } from "typeorm";
 
 @Entity({ name: 'usuario' })
@@ -18,9 +19,9 @@ export class Usuario {
     contrasenia: String;
     @Column({ nullable: true })
     notificacion_token: String;
-    @Column()
-    rol: String;
-    @Column()
+    @Column({ default: 'default' })
+    rol: string;
+    @Column({ default: 1 })
     estado: number;
 
     // atri.auditoria
@@ -30,5 +31,10 @@ export class Usuario {
     modificado_en: Date;
     @Column({ type: 'int', nullable: false })
     usuario_id: number;
+
+    @BeforeInsert()
+    async hasConstrasenia() {
+        this.contrasenia = await hash(this.contrasenia, Number(process.env.HASH_SALT));
+    }
 
 }

@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 
 
 
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -17,7 +18,7 @@ import { AuthModule } from './auth/auth.module';
       username: 'root',
       password: '8766630',
       database: 'proyecto_db',
-      entities: [__dirname+ '/**/*.entity{.ts,.js}'],
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
     UsuariosModule,

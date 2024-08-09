@@ -8,7 +8,7 @@ export class CrearUsuarioDto{
     imagen? : string;
     contrasenia : string;
     notificacion_token? : string;
-    rol : string;
+    rol? : string;
     estado : number;
     // usuario_id?: number;
     

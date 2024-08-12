@@ -1,5 +1,6 @@
 import { hash } from "bcrypt";
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } from "typeorm";
+import { Rol } from "src/roles/rol.entity";
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, ManyToMany, JoinTable } from "typeorm";
 
 @Entity({ name: 'usuario' })
 export class Usuario {
@@ -9,18 +10,21 @@ export class Usuario {
     nombre: String;
     @Column()
     apellido: String;
+
     @Column({ unique: true })
     correo: String;
+
     @Column({ unique: true })
     telefono: String;
     @Column({ nullable: true })
     imagen: String;
+
     @Column()
     contrasenia: String;
+
     @Column({ nullable: true })
     notificacion_token: String;
-    @Column({ default: 'default' })
-    rol: string;
+
     @Column({ default: 1 })
     estado: number;
 
@@ -31,6 +35,12 @@ export class Usuario {
     modificado_en: Date;
     @Column({ type: 'int', nullable: false })
     usuario_id: number;
+
+    @JoinTable()//define como tabla principal
+
+    //Relacion
+    @ManyToMany(() => Rol, (rol) => rol.usuarios)
+    roles: Rol[];
 
     @BeforeInsert()
     async hasConstrasenia() {

@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { Usuario } from './usuarios/usuario.entity';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { AuthModule } from './auth/auth.module';
+import { RolesModule } from './roles/roles.module';
 
 
 
@@ -21,8 +22,9 @@ import { AuthModule } from './auth/auth.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
-    UsuariosModule,
-    AuthModule
+    UsuariosModule,RolesModule,
+    AuthModule,
+    RolesModule
   ],
 })
 export class AppModule { }

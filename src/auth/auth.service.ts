@@ -23,14 +23,14 @@ export class AuthService {
 
         if (CorreoExistente) {
             // 409 conflict 
-            return new HttpException("El correo ya esta Registrado", HttpStatus.CONFLICT);
+            throw new HttpException("El correo ya esta Registrado", HttpStatus.CONFLICT);
         }
 
         const telefonoExistente = await this.usuariosRepositorio.findOneBy({ telefono: usuario.telefono });
 
         if (telefonoExistente) {
             // 409 conflict 
-            return new HttpException("El numero ya esta Registrado", HttpStatus.CONFLICT);
+            throw new HttpException("El numero ya esta Registrado", HttpStatus.CONFLICT);
         }
 
         const nuevoUsuario = this.usuariosRepositorio.create({
@@ -38,14 +38,27 @@ export class AuthService {
             usuario_id: currentUserId, // Asigna el usuario_id aquí
         });
 
+        let RolesIDs=[];
 
-        const constRolesIDs = usuario.rolesIDs;
-        const roles = await this.rolesRepositorio.findBy({ id: In(constRolesIDs) });
+        if(usuario.rolesIDs!==undefined && usuario.rolesIDs!== null){
+
+            RolesIDs = usuario.rolesIDs;
+
+        }else{
+            RolesIDs.push('VENDEDOR')
+        }
+        
+        const roles = await this.rolesRepositorio.findBy({ id: In(RolesIDs) });
         nuevoUsuario.roles = roles;
 
         const usuarioGuardado = await this.usuariosRepositorio.save(nuevoUsuario);
+        const rolesString = usuarioGuardado.roles.map(rol => rol.id);
 
-        const payload = { id: usuarioGuardado, nombre: usuarioGuardado.nombre };
+        const payload = {
+            id: usuarioGuardado.id,
+            nombre: usuarioGuardado.nombre,
+            roles:rolesString
+        };
         const token = this.jwtService.sign(payload);
         const data = {
             usuario: usuarioGuardado,
@@ -61,19 +74,25 @@ export class AuthService {
         const { correo, contrasenia } = loginData;
         const usuarioEncontrado = await this.usuariosRepositorio.findOne({
             where: { correo: correo },
-            relations:['roles']
+            relations: ['roles']
         })
         if (!usuarioEncontrado) {
             // error 404
-            return new HttpException("El Correo no esta Registrado", HttpStatus.NOT_FOUND);
+            throw new HttpException("El Correo no esta Registrado", HttpStatus.NOT_FOUND);
         }
         const ContraseniaValida = await compare(contrasenia, usuarioEncontrado.contrasenia)
         if (!ContraseniaValida) {
             // error 403 
-            return new HttpException("La contraseña es Incorrecta", HttpStatus.FORBIDDEN);
+            throw new HttpException("La contraseña es Incorrecta", HttpStatus.FORBIDDEN);
         }
 
-        const payload = { id: usuarioEncontrado, nombre: usuarioEncontrado.nombre };
+        const rolesIDs = usuarioEncontrado.roles.map(rol => rol.id);//['Administrador','Vendedor']
+
+        const payload = {
+            id: usuarioEncontrado.id,
+            nombre: usuarioEncontrado.nombre,
+            roles: rolesIDs
+        };
         const token = this.jwtService.sign(payload);
         const data = {
             usuario: usuarioEncontrado,

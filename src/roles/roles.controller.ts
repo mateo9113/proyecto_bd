@@ -11,7 +11,7 @@ export class RolesController {
 
     constructor(private rolesServicio: RolesService){}
 
-    @HasRoles(JwtRole.ADMINISTRADOR) // proteger para q entren solo admin
+    @HasRoles(JwtRole.ADMIN) // proteger para q entren solo admin
     @UseGuards(jwtAuthGuard,JwtRolesGuard)
     @Post()
     create(@Body()rol:CrearRolDto){

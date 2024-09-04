@@ -21,7 +21,7 @@ export class UsuariosController {
     // PUT ' PATCH  -> ACUALIZAR
     // DELETE  -> ELIMINAR
 
-    @HasRoles(JwtRole.ADMINISTRADOR,JwtRole.VENDEDOR) // proteger para q entren solo admin
+    @HasRoles(JwtRole.ADMIN,JwtRole.CLIENT) // proteger para q entren solo admin
     @UseGuards(jwtAuthGuard,JwtRolesGuard)//proteger las rutas 
     @Get() //http://localhost/usuarios
     findAll() {
@@ -34,15 +34,15 @@ export class UsuariosController {
 
     }
 
-    @HasRoles(JwtRole.ADMINISTRADOR,JwtRole.VENDEDOR) // proteger para q entren solo admin
+    @HasRoles(JwtRole.CLIENT) // proteger para q entren solo admin
     @UseGuards(jwtAuthGuard,JwtRolesGuard) //usuario autenficado nomas pueda hacer eso 
-    @Put(':id')//http://192.168.1.7:3000/usuarios
+    @Put(':id')//http://192.168.1.7:3000/actualizar
     actualizar(@Param('id', ParseIntPipe) id: number, @Body() usuario: ActualizarUsuarioDto) {
         return this.usuariosServicio.actualizar(id, usuario);
     }
 
 
-    @HasRoles(JwtRole.ADMINISTRADOR,JwtRole.VENDEDOR) // proteger para q entren solo admin
+    @HasRoles(/*JwtRole.ADMINISTRADOR,JwtRole.VENDEDOR*/) // proteger para q entren solo admin
     @UseGuards(jwtAuthGuard,jwtAuthGuard)
     @Post('acualizarImagen/:id')
     @UseInterceptors(FileInterceptor('file'))

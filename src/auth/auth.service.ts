@@ -35,6 +35,7 @@ export class AuthService {
 
         const nuevoUsuario = this.usuariosRepositorio.create({
             ...usuario,
+
             usuario_id: currentUserId, // Asigna el usuario_id aquí
         });
 
@@ -45,7 +46,7 @@ export class AuthService {
             RolesIDs = usuario.rolesIDs;
 
         }else{
-            RolesIDs.push('VENDEDOR')
+            RolesIDs.push('CLIENT')
         }
         
         const roles = await this.rolesRepositorio.findBy({ id: In(RolesIDs) });

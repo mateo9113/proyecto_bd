@@ -1,4 +1,4 @@
 export enum JwtRole {
-    VENDEDOR = "VENDEDOR",
-    ADMINISTRADOR = "ADMINISTRADOR",
+    CLIENT = "CLIENT",
+    ADMIN = "ADMIN",
 }

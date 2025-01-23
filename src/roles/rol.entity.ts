@@ -16,7 +16,7 @@ export class Rol {
     ruta: string;
 
     @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
-    crear_en: Date;
+    creado_en: Date;
 
     @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
     modificado_en: Date;

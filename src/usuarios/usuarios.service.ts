@@ -16,6 +16,7 @@ export class UsuariosService {
 
     constructor(
         @InjectRepository(Usuario) private usuariosRepositorio: Repository<Usuario>,
+        @InjectRepository(Rol) private rolesRepositorio: Repository<Rol>,
     ) { }
 
     create(usuario: CrearUsuarioDto) {
